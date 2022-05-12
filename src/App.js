@@ -21,13 +21,11 @@ sinGain.connect(audioCtx.destination);
 sinOsc.type = 'sine';
 sinGain.gain.value = 0;
 sinOsc.frequency.value = sinState.freq;
-
+sinOsc.start();
 console.log(sinState, sinOsc.frequency.value)
 
-const startSin = () => {
-  sinOsc.start();
-}
 const playSin = () => {
+  audioCtx.resume();
   const {gain, GA, GD, GS} = sinState;
   sinGain.gain.cancelScheduledValues(audioCtx.currentTime);
   sinGain.gain.linearRampToValueAtTime(gain, audioCtx.currentTime+GA); //attack time to value
@@ -46,7 +44,6 @@ const changeSin = (e) => {
 
   return (
     <div className="App">
-<button onClick={() => startSin()}>Start</button>
 <button onMouseDown={() => playSin()}  onMouseUp={() => releaseSin()}>Play</button>
 
 <input id="freq" type="range" min={1} max={2000} value={sinState.freq} onChange={changeSin}/>
