@@ -1,27 +1,29 @@
 import { useState } from 'react';
 import './App.css';
 
-function App() {
-  let audioCtx
-  try {
-      // Fix up for prefixing
-      window.AudioContext = window.AudioContext || window.webkitAudioContext;
-      audioCtx = new AudioContext();
-  }catch (e) {
-    alert('Web Audio API is not supported in this browser');
+let audioCtx
+try {
+    // Fix up for prefixing
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    audioCtx = new AudioContext();
+}catch (e) {
+  alert('Web Audio API is not supported in this browser');
 }
-
-const [sinState, setSinState] = useState({freq: 400, res: 0, gain:.3, tune: 0, GA: 0, GD: 1, GS: .2, GR: .5});
 
 const sinOsc = audioCtx.createOscillator();
 const sinGain = audioCtx.createGain();
-
-  sinOsc.connect(sinGain);
+sinOsc.connect(sinGain);
 sinGain.connect(audioCtx.destination);
 sinOsc.type = 'sine';
+sinOsc.start();
+
+function App() {
+
+const [sinState, setSinState] = useState({freq: 400, res: 0, gain:.3, tune: 0, GA: 0, GD: 1, GS: .2, GR: .5});
+
 sinGain.gain.value = 0;
 sinOsc.frequency.value = sinState.freq;
-sinOsc.start();
+
 console.log(sinState, sinOsc.frequency.value)
 
 const playSin = () => {
